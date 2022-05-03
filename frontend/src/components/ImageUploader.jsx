@@ -1,32 +1,37 @@
-import React, { useState, useRef } from 'react'
-import { AdvancedImage } from '@cloudinary/react';
+import React, { useState, useRef } from "react";
+import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
-import { NFTStorage, File, Blob } from 'nft.storage'
+import { NFTStorage, File, Blob } from "nft.storage";
 // Import required actions and qualifiers.
-import {thumbnail} from "@cloudinary/url-gen/actions/resize";
-import {byRadius} from "@cloudinary/url-gen/actions/roundCorners";
-import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
-import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
-import {text} from "@cloudinary/url-gen/qualifiers/source";
-import {Position} from "@cloudinary/url-gen/qualifiers/position";
-import {TextStyle} from "@cloudinary/url-gen/qualifiers/textStyle";
-import {compass} from "@cloudinary/url-gen/qualifiers/gravity";
-import {source} from "@cloudinary/url-gen/actions/overlay";
+import { thumbnail } from "@cloudinary/url-gen/actions/resize";
+import { byRadius } from "@cloudinary/url-gen/actions/roundCorners";
+import { focusOn } from "@cloudinary/url-gen/qualifiers/gravity";
+import { FocusOn } from "@cloudinary/url-gen/qualifiers/focusOn";
+import { text } from "@cloudinary/url-gen/qualifiers/source";
+import { Position } from "@cloudinary/url-gen/qualifiers/position";
+import { TextStyle } from "@cloudinary/url-gen/qualifiers/textStyle";
+import { compass } from "@cloudinary/url-gen/qualifiers/gravity";
+import { source } from "@cloudinary/url-gen/actions/overlay";
 
 // Cloudinary client
 const cloud = process.env.CLOUDINARY_CLOUD_NAME;
-const cloudinaryUrl = "https://api.cloudinary.com/v1_1/" + cloud + "/image/upload";
+const cloudinaryUrl =
+  "https://api.cloudinary.com/v1_1/" + cloud + "/image/upload";
 const cld = new Cloudinary({
   cloud: {
-    cloudName: cloud
-  }
+    cloudName: cloud,
+  },
 });
 
 // NFT Storage client
 const client = new NFTStorage({ token: process.env.IPFS_TOKEN });
 
-
-export const ImageUploader = ({ trackerNumber, onSuccess, onError }) => {
+export const ImageUploader = ({
+  trackerNumber,
+  onSuccess,
+  onError,
+  isDisabled,
+}) => {
   const fileInput = useRef(null);
   const [myImage, setMyImage] = useState();
 
@@ -39,22 +44,26 @@ export const ImageUploader = ({ trackerNumber, onSuccess, onError }) => {
       .then((data) => {
         // 1.1 receives the public_id of the raw file in Cloudinary
         const cloudinaryPublicId = data.public_id;
-        console.log("Image uploaded to Cloudinary successfully (" + cloudinaryPublicId + ")");
+        console.log(
+          "Image uploaded to Cloudinary successfully (" +
+            cloudinaryPublicId +
+            ")"
+        );
 
         // 1.2 transform the image
-        const transformedImage = cld.image(cloudinaryPublicId)
-          .resize(thumbnail()
-            .width(150)
-            .height(150)
-            .gravity(focusOn(FocusOn.face())))  // Crop the image, focusing on the face.
-          .roundCorners(byRadius(20))    // Round the corners.
+        const transformedImage = cld
+          .image(cloudinaryPublicId)
+          .resize(
+            thumbnail().width(150).height(150).gravity(focusOn(FocusOn.face()))
+          ) // Crop the image, focusing on the face.
+          .roundCorners(byRadius(20)) // Round the corners.
           .overlay(
             source(
-              text(trackerNumber, new TextStyle('Cookie', 40)
-                .fontWeight('bold'))
-                .textColor('#f08')
-            )
-              .position(new Position().gravity(compass('center')))
+              text(
+                trackerNumber,
+                new TextStyle("Cookie", 40).fontWeight("bold")
+              ).textColor("#f08")
+            ).position(new Position().gravity(compass("center")))
           );
         setMyImage(transformedImage);
 
@@ -69,16 +78,18 @@ export const ImageUploader = ({ trackerNumber, onSuccess, onError }) => {
       })
       .then((data) => {
         // 3 Show a preview of the transformed image
-        console.log("Image uploaded to NFT.Storage successfully (" + data + ")");
+        console.log(
+          "Image uploaded to NFT.Storage successfully (" + data + ")"
+        );
         onSuccess(data);
       });
-  }
+  };
 
   const downloadTransformedImage = (url) => {
     return fetch(url, {
-      method: "GET"
+      method: "GET",
     });
-  }
+  };
 
   const uploadToCloudinary = (file) => {
     const formData = new FormData();
@@ -87,30 +98,42 @@ export const ImageUploader = ({ trackerNumber, onSuccess, onError }) => {
 
     return fetch(cloudinaryUrl, {
       method: "POST",
-      body: formData
+      body: formData,
     });
-  }
+  };
 
   const uploadToNFTStorage = async (file) => {
     const blob = new Blob([await file.arrayBuffer()]);
     return client.storeBlob(blob);
-  }
-
-
+  };
 
   return (
     <div>
-      {myImage
-        ?
+      {myImage ? (
         <div>
           <AdvancedImage cldImg={myImage} />
         </div>
-        :
+      ) : (
         <div className="file-uploader">
-          <input ref={fileInput} type="file" onChange={handleFileInput} hidden />
-          <button onClick={(e) => { e.preventDefault(); fileInput.current && fileInput.current.click() }} className="btn btn-primary">Chose file...</button>
+          <input
+            ref={fileInput}
+            type="file"
+            onChange={handleFileInput}
+            hidden
+            disabled={isDisabled}
+          />
+          <button
+            disabled={isDisabled}
+            onClick={(e) => {
+              e.preventDefault();
+              fileInput.current && fileInput.current.click();
+            }}
+            className="btn btn-primary"
+          >
+            Chose file...
+          </button>
         </div>
-      }
+      )}
     </div>
-  )
-}
+  );
+};

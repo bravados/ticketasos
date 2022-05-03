@@ -1,0 +1,10 @@
+{
+    "name": "nft-marketplace",
+    "version": "1.0.0",
+    "description": "Xing's Hackaweek 19",
+    "author": "Javier Mesa & Dave Padrino",
+    "license": "ISC",
+    "scripts": {
+        "build": "cd nft-contract && bash build.sh && cd .. && ls && cd market-contract && bash build.sh && cd .."
+    }
+}

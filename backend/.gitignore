@@ -2,6 +2,9 @@
 # dependencies
 /node_modules
 
+# wasm files
+/out
+
 
 # misc
 .DS_Store

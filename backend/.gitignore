@@ -5,6 +5,7 @@
 # wasm files
 /out
 
+/**/target/*
 
 # misc
 .DS_Store

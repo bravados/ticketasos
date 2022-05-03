@@ -52,7 +52,7 @@ export default function Form({ onSubmit, currentUser }) {
           <span title="NEAR Tokens">Ⓝ</span>
         </p>
         <input id="nftStorageId" ref={nftStorageId} type="text" hidden />
-        <button type="submit" disabled={!nftStorageId}>
+        <button type="submit" disabled={!nftStorageId?.current?.value}>
           Sign
         </button>
       </fieldset>

@@ -36,7 +36,6 @@ const Sell = ({ currentUser, nearConfig, contract, wallet }) => {
   };
 
   const signIn = () => {
-    console.log("wallet", wallet, currentUser);
     wallet.requestSignIn(
       {
         contractId: nearConfig.contractName,
@@ -48,16 +47,10 @@ const Sell = ({ currentUser, nearConfig, contract, wallet }) => {
     );
   };
 
-  const signOut = () => {
-    wallet.signOut();
-    window.location.replace(window.location.origin + window.location.pathname);
-  };
-
   const LoggedIn = () => {
     return (
       <>
         <Form onSubmit={onSubmit} currentUser={currentUser} />
-        <button onClick={signOut}>Log out</button>
       </>
     );
   };

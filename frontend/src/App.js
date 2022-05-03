@@ -9,7 +9,7 @@ import Header from "./components/Header";
 const App = ({ contract, currentUser, nearConfig, wallet }) => {
   return (
     <>
-      <Header />
+      <Header wallet={wallet} currentUser={currentUser} />
       <main>
         <Router>
           <Switch>

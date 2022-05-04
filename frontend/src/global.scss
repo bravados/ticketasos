@@ -156,5 +156,40 @@ header {
 }
 
 main {
-  margin-top: 100px;
+  margin-top: 150px;
+}
+
+.card {
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 10%;
+  height: 350px;
+  list-style: none;
+  width: 300px;
+  border: 1px solid;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.card__image {
+  width: 100%;
+  height: auto;
+}
+
+.marketplace .list {
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.buy__ticket {
+  position: absolute;
+  bottom: 20px;
+  right: 50%;
+  transform: translateX(50%);
+  &:hover,
+  &:focus {
+    top: auto;
+  }
 }

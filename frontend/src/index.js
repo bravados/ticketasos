@@ -43,7 +43,7 @@ async function initContracts() {
       // View methods are read-only – they don't modify the state, but usually return some value
       viewMethods: ["nft_tokens"],
       // Change methods can modify the state, but you don't receive the returned value when called
-      changeMethods: ["new_default_meta", "nft_mint", "nft_approve"],
+      changeMethods: ["new_default_meta", "nft_mint_and_approve"],
       // Sender is the account ID to initialize transactions.
       // getAccountId() will return empty string if user is still unauthorized
       sender: walletConnection.getAccountId(),

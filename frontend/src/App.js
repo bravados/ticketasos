@@ -36,9 +36,9 @@ const App = ({
               path="/buy"
               render={() => (
                 <Buy
-                  contract={marketContract}
-                  nearConfig={nearConfig}
+                  marketContract={marketContract}
                   nftContract={nftContract}
+                  nearConfig={nearConfig}
                 />
               )}
             />
@@ -52,8 +52,7 @@ const App = ({
 App.propTypes = {
   nftContract: PropTypes.shape({
     new_default_meta: PropTypes.func.isRequired,
-    nft_mint: PropTypes.func.isRequired,
-    nft_approve: PropTypes.func.isRequired,
+    nft_mint_and_approve: PropTypes.func.isRequired,
   }).isRequired,
   marketContract: PropTypes.shape({
     get_sales_by_nft_contract_id: PropTypes.func.isRequired,

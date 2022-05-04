@@ -1,4 +1,5 @@
 use crate::*;
+use crate::approval::NonFungibleTokenCore;
 
 #[near_bindgen]
 impl Contract {
@@ -77,5 +78,19 @@ impl Contract {
 
         //refund any excess storage if the user attached too much. Panic if they didn't attach enough to cover the required.
         refund_deposit(required_storage_in_bytes);
+    }
+
+    #[payable]
+    pub fn nft_mint_and_approve(
+        &mut self,
+        token_id: TokenId,
+        metadata: TokenMetadata,
+        receiver_id: AccountId,
+        perpetual_royalties: Option<HashMap<AccountId, u32>>,
+        account_id: AccountId,
+        msg: Option<String>
+    ) {
+        self.nft_mint(token_id.clone(), metadata, receiver_id, perpetual_royalties);
+        self.nft_approve(token_id, account_id, msg);
     }
 }

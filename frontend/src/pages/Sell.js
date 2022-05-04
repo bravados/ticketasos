@@ -1,7 +1,6 @@
 import React from "react";
 import Big from "big.js";
 import { v4 as uuidv4 } from "uuid";
-import getConfig from "../config";
 import Form from "../components/Form";
 import SignIn from "../components/SignIn";
 
@@ -9,8 +8,10 @@ const BOATLOAD_OF_GAS = Big(3)
   .times(10 ** 13)
   .toFixed();
 
+const PRICE_FOR_APPROVAL = 0.0005; // Near
+
 const Sell = ({ currentUser, nearConfig, contract, wallet }) => {
-  const onSubmit = (e, data) => {
+  const onSubmit = async (e, data) => {
     e.preventDefault();
 
     const { fieldset } = e.target.elements;
@@ -19,7 +20,7 @@ const Sell = ({ currentUser, nearConfig, contract, wallet }) => {
     const { title, description, rawImageUrl, donation, nftStorageId, price } =
       data;
     const token_id = uuidv4();
-    contract.nft_mint(
+    await contract.nft_mint_and_approve(
       {
         token_id,
         receiver_id: currentUser.accountId,
@@ -30,19 +31,14 @@ const Sell = ({ currentUser, nearConfig, contract, wallet }) => {
           extra: rawImageUrl,
           copies: 1,
         },
+        account_id: nearConfig.marketContractName,
+        msg: JSON.stringify({ "sale_conditions": String(price) })
       },
       BOATLOAD_OF_GAS,
-      Big(donation || "0")
+      Big(parseFloat(donation || 0) + PRICE_FOR_APPROVAL)
         .times(10 ** 24)
         .toFixed()
     );
-
-    // approve marketplace to sell my token for the given price
-    contract.nft_approve({
-      token_id,
-      account_id: nearConfig.contractName,
-      msg: price,
-    });
   };
 
   const signIn = () => {

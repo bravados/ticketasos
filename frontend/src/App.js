@@ -35,7 +35,11 @@ const App = ({
               exact
               path="/buy"
               render={() => (
-                <Buy contract={marketContract} nearConfig={nearConfig} />
+                <Buy
+                  contract={marketContract}
+                  nearConfig={nearConfig}
+                  nftContract={nftContract}
+                />
               )}
             />
           </Switch>

@@ -40,7 +40,7 @@ const Sell = ({ currentUser, nearConfig, contract, wallet }) => {
     // approve marketplace to sell my token for the given price
     contract.nft_approve({
       token_id,
-      account_id: nearConfig.marketContractName,
+      account_id: nearConfig.contractName,
       msg: price,
     });
   };

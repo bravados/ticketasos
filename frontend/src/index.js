@@ -57,7 +57,7 @@ async function initContracts() {
     // accountId of the contract we will be loading
     // NOTE: All contracts on NEAR are deployed to an account and
     // accounts can only have one contract deployed to them.
-    nearConfig.marketContract,
+    nearConfig.marketContractName,
     {
       // View methods are read-only – they don't modify the state, but usually return some value
       viewMethods: ["get_sales_by_nft_contract_id"],

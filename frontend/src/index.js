@@ -5,7 +5,7 @@ import getConfig from './config.js';
 import * as nearAPI from 'near-api-js';
 
 // Initializing contract
-async function initContract() {
+async function initContracts() {
   console.log(process);
   // get network configuration values from config.js
   // based on the network ID we pass to getConfig()
@@ -33,33 +33,53 @@ async function initContract() {
   }
 
   // Initializing our contract APIs by contract name and configuration
-  const contract = await new nearAPI.Contract(
+  const nftContract = await new nearAPI.Contract(
     // User's accountId as a string
     walletConnection.account(),
     // accountId of the contract we will be loading
     // NOTE: All contracts on NEAR are deployed to an account and
     // accounts can only have one contract deployed to them.
-    nearConfig.contractName,
+    nearConfig.nftContractName,
     {
       // View methods are read-only – they don't modify the state, but usually return some value
-      viewMethods: [],
+      viewMethods: ['nft_tokens'],
       // Change methods can modify the state, but you don't receive the returned value when called
-      changeMethods: ['new_default_meta', 'nft_mint'],
+      changeMethods: ['new_default_meta', 'nft_mint', 'nft_approve'],
       // Sender is the account ID to initialize transactions.
       // getAccountId() will return empty string if user is still unauthorized
       sender: walletConnection.getAccountId(),
     }
   );
 
-  return { contract, currentUser, nearConfig, walletConnection };
+  // Initializing our contract APIs by contract name and configuration
+  const marketContract = await new nearAPI.Contract(
+    // User's accountId as a string
+    walletConnection.account(),
+    // accountId of the contract we will be loading
+    // NOTE: All contracts on NEAR are deployed to an account and
+    // accounts can only have one contract deployed to them.
+    nearConfig.marketContract,
+    {
+      // View methods are read-only – they don't modify the state, but usually return some value
+      viewMethods: ['get_sales_by_nft_contract_id'],
+      // Change methods can modify the state, but you don't receive the returned value when called
+      changeMethods: ['offer'],
+      // Sender is the account ID to initialize transactions.
+      // getAccountId() will return empty string if user is still unauthorized
+      sender: walletConnection.getAccountId(),
+    }
+  );
+
+  return { nftContract, marketContract, currentUser, nearConfig, walletConnection };
 }
 
-window.nearInitPromise = initContract()
+window.nearInitPromise = initContracts()
   .then(
-    ({ contract, currentUser, nearConfig, walletConnection }) => {
+    ({ nftContract, marketContract, currentUser, nearConfig, walletConnection }) => {
       ReactDOM.render(
         <App
-          contract={contract}
+          nftContract={nftContract}
+          marketContract={marketContract}
           currentUser={currentUser}
           nearConfig={nearConfig}
           wallet={walletConnection}

@@ -3,18 +3,28 @@ import PropTypes from "prop-types";
 import Big from "big.js";
 import { ImageUploader } from "./ImageUploader";
 
-const RECOMMENDED_NEAR = 0.01;
+const RECOMMENDED_NEAR = 0.009;
 
 export default function Form({ onSubmit, currentUser }) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0.0);
   const [trackerNumber, setTrackerNumber] = useState("");
-  const nftStorageId = useRef();
+  const [rawImageUrl, setRawImageUrl] = useState("");
+  const [nftStorageId, setNftStorageId] = useState("");
+  const [donation, setDonation] = useState(RECOMMENDED_NEAR);
 
-  const setNftStorageId = (data) => {
-    nftStorageId.current.value = data;
+  const onSuccessImageUploaded = (data) => {
+    setNftStorageId(data.ntftStorageUrl);
+    setRawImageUrl(data.rawImageUrl);
   };
 
+  const onSubmitForm = (e) => {
+    onSubmit(e, { title, description, rawImageUrl, donation, nftStorageId });
+  }
+
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmitForm}>
       <fieldset id="fieldset">
         <div>
           <label htmlFor="trackerNumber">Product tracker #:</label>
@@ -26,12 +36,26 @@ export default function Form({ onSubmit, currentUser }) {
         </div>
 
         <p>
+          <label htmlFor="title">Title of the event</label>
+          <input id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+        </p>
+
+        <p>
+          <label htmlFor="description">Instructions for the buyer about the ticket</label>
+          <input id="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+        </p>
+
+        <p>
+          <label htmlFor="price">Price</label>
+          <input id="price" type="text" value={price} onChange={setPrice} />
+        </p>
+
+        <p>
           Upload a representative picture of the event, {currentUser.accountId}!
-          (It needs a tracking number to associate with)
         </p>
         <ImageUploader
           trackerNumber={trackerNumber}
-          onSuccess={(res) => setNftStorageId(res)}
+          onSuccess={(res) => onSuccessImageUploaded(res)}
           onError={() => {}}
           isDisabled={!trackerNumber}
         />
@@ -42,17 +66,17 @@ export default function Form({ onSubmit, currentUser }) {
           </label>
           <input
             autoComplete="off"
-            defaultValue={RECOMMENDED_NEAR}
             id="donation"
             max={Big(currentUser.balance).div(10 ** 24)}
             min="0.009"
             step="0.01"
             type="number"
+            value={donation}
+            onChange={(e) => setDonation(e.target.value)}
           />
           <span title="NEAR Tokens">Ⓝ</span>
         </p>
-        <input id="nftStorageId" ref={nftStorageId} type="text" hidden />
-        <button type="submit" disabled={!nftStorageId?.current?.value}>
+        <button type="submit" disabled={!nftStorageId}>
           Sign
         </button>
       </fieldset>

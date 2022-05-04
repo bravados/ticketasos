@@ -9,30 +9,33 @@ const BOATLOAD_OF_GAS = Big(3)
   .toFixed();
 
 const Sell = ({ currentUser, nearConfig, contract, wallet }) => {
-  const onSubmit = (e) => {
+  const onSubmit = (e, data) => {
     e.preventDefault();
 
-    const { fieldset, trackerNumber, donation, nftStorageId } =
-      e.target.elements;
-
+    const { fieldset } = e.target.elements;
     fieldset.disabled = true;
+
+    const { title, description, rawImageUrl, donation, nftStorageId } = data;
 
     contract.nft_mint(
       {
         token_id: uuidv4(),
         receiver_id: currentUser.accountId,
         metadata: {
-          title: "New NFT for you from Brandy",
-          description: "My NFT media",
-          media: nftStorageId.value,
+          title,
+          description,
+          media: nftStorageId,
+          extra: rawImageUrl,
           copies: 1,
         },
       },
       BOATLOAD_OF_GAS,
-      Big(donation.value || "0")
+      Big(donation || "0")
         .times(10 ** 24)
         .toFixed()
     );
+
+    // TODO contract.nft_approve
   };
 
   const signIn = () => {

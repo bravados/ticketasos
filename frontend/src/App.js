@@ -6,7 +6,7 @@ import Sell from "./pages/Sell";
 import Buy from "./pages/Buy";
 import Header from "./components/Header";
 
-const App = ({ contract, currentUser, nearConfig, wallet }) => {
+const App = ({ nftContract, marketContract, currentUser, nearConfig, wallet }) => {
   return (
     <>
       <Header wallet={wallet} currentUser={currentUser} />
@@ -18,7 +18,7 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
               path="/"
               render={() => (
                 <Sell
-                  contract={contract}
+                  contract={nftContract}
                   currentUser={currentUser}
                   nearConfig={nearConfig}
                   wallet={wallet}
@@ -34,16 +34,22 @@ const App = ({ contract, currentUser, nearConfig, wallet }) => {
 };
 
 App.propTypes = {
-  contract: PropTypes.shape({
+  nftContract: PropTypes.shape({
     new_default_meta: PropTypes.func.isRequired,
     nft_mint: PropTypes.func.isRequired,
+    nft_approve: PropTypes.func.isRequired,
+  }).isRequired,
+  marketContract: PropTypes.shape({
+    get_sales_by_nft_contract_id: PropTypes.func.isRequired,
+    offer: PropTypes.func.isRequired,
   }).isRequired,
   currentUser: PropTypes.shape({
     accountId: PropTypes.string.isRequired,
     balance: PropTypes.string.isRequired,
   }),
   nearConfig: PropTypes.shape({
-    contractName: PropTypes.string.isRequired,
+    nftContractName: PropTypes.string.isRequired,
+    marketContractName: PropTypes.string.isRequired,
   }).isRequired,
   wallet: PropTypes.shape({
     requestSignIn: PropTypes.func.isRequired,

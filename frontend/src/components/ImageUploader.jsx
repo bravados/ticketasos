@@ -34,6 +34,7 @@ export const ImageUploader = ({
 }) => {
   const fileInput = useRef(null);
   const [myImage, setMyImage] = useState();
+  let rawImageUrl;
 
   const handleFileInput = (e) => {
     const file = e.target.files[0];
@@ -54,21 +55,24 @@ export const ImageUploader = ({
         const transformedImage = cld
           .image(cloudinaryPublicId)
           .resize(
-            thumbnail().width(150).height(150).gravity(focusOn(FocusOn.face()))
+            thumbnail().width(300).height(300).gravity(focusOn(FocusOn.face()))
           ) // Crop the image, focusing on the face.
           .roundCorners(byRadius(20)) // Round the corners.
           .overlay(
             source(
               text(
                 trackerNumber,
-                new TextStyle("Cookie", 40).fontWeight("bold")
-              ).textColor("#f08")
+                new TextStyle("Roboto", 40).fontWeight("bold")
+              ).textColor("#399E5A")
             ).position(new Position().gravity(compass("center")))
           );
         setMyImage(transformedImage);
 
-        // 1.2 Download the transformed image
-        var transformedImageUrl = transformedImage.toURL();
+        // 1.3 Saves the raw image
+        rawImageUrl = data.url;
+
+        // 1.4 Download the transformed image
+        const transformedImageUrl = transformedImage.toURL();
         return downloadTransformedImage(transformedImageUrl);
       })
       // 2 Upload the transformed image to NFTStorage
@@ -81,7 +85,10 @@ export const ImageUploader = ({
         console.log(
           "Image uploaded to NFT.Storage successfully (" + data + ")"
         );
-        onSuccess(data);
+        onSuccess({
+          ntftStorageUrl: data,
+          rawImageUrl
+        });
       });
   };
 

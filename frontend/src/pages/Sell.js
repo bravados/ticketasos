@@ -1,6 +1,7 @@
 import React from "react";
 import Big from "big.js";
 import { v4 as uuidv4 } from "uuid";
+import getConfig from "../config";
 import Form from "../components/Form";
 import SignIn from "../components/SignIn";
 
@@ -15,11 +16,12 @@ const Sell = ({ currentUser, nearConfig, contract, wallet }) => {
     const { fieldset } = e.target.elements;
     fieldset.disabled = true;
 
-    const { title, description, rawImageUrl, donation, nftStorageId } = data;
-
+    const { title, description, rawImageUrl, donation, nftStorageId, price } =
+      data;
+    const token_id = uuidv4();
     contract.nft_mint(
       {
-        token_id: uuidv4(),
+        token_id,
         receiver_id: currentUser.accountId,
         metadata: {
           title,
@@ -35,7 +37,12 @@ const Sell = ({ currentUser, nearConfig, contract, wallet }) => {
         .toFixed()
     );
 
-    // TODO contract.nft_approve
+    // approve marketplace to sell my token for the given price
+    contract.nft_approve({
+      token_id,
+      account_id: nearConfig.marketContractName,
+      msg: price,
+    });
   };
 
   const signIn = () => {

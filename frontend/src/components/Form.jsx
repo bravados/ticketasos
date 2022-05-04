@@ -20,8 +20,15 @@ export default function Form({ onSubmit, currentUser }) {
   };
 
   const onSubmitForm = (e) => {
-    onSubmit(e, { title, description, rawImageUrl, donation, nftStorageId });
-  }
+    onSubmit(e, {
+      title,
+      description,
+      rawImageUrl,
+      donation,
+      nftStorageId,
+      price,
+    });
+  };
 
   return (
     <form onSubmit={onSubmitForm}>
@@ -37,17 +44,34 @@ export default function Form({ onSubmit, currentUser }) {
 
         <p>
           <label htmlFor="title">Title of the event</label>
-          <input id="title" type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+          <input
+            id="title"
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </p>
 
         <p>
-          <label htmlFor="description">Instructions for the buyer about the ticket</label>
-          <input id="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <label htmlFor="description">
+            Instructions for the buyer about the ticket
+          </label>
+          <input
+            id="description"
+            type="text"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </p>
 
         <p>
           <label htmlFor="price">Price</label>
-          <input id="price" type="text" value={price} onChange={setPrice} />
+          <input
+            id="price"
+            type="text"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+          />
         </p>
 
         <p>

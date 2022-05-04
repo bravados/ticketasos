@@ -6,7 +6,13 @@ import Sell from "./pages/Sell";
 import Buy from "./pages/Buy";
 import Header from "./components/Header";
 
-const App = ({ nftContract, marketContract, currentUser, nearConfig, wallet }) => {
+const App = ({
+  nftContract,
+  marketContract,
+  currentUser,
+  nearConfig,
+  wallet,
+}) => {
   return (
     <>
       <Header wallet={wallet} currentUser={currentUser} />
@@ -25,7 +31,13 @@ const App = ({ nftContract, marketContract, currentUser, nearConfig, wallet }) =
                 />
               )}
             />
-            <Route exact path="/buy" component={Buy} />
+            <Route
+              exact
+              path="/buy"
+              render={() => (
+                <Buy contract={marketContract} nearConfig={nearConfig} />
+              )}
+            />
           </Switch>
         </Router>
       </main>

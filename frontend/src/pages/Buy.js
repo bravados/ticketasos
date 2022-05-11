@@ -6,7 +6,7 @@ const BOATLOAD_OF_GAS = Big(15)
   .times(10 ** 13)
   .toFixed();
 
-const Buy = ({ marketContract, nftContract, nearConfig }) => {
+const Buy = ({ marketContract, nftContract, currentUser, nearConfig }) => {
   const [availableTokens, setAvailableTokens] = useState([]);
 
   const mergedNftMetadata = ({ allSales, allNftMetadata }) => {
@@ -51,7 +51,7 @@ const Buy = ({ marketContract, nftContract, nearConfig }) => {
         {availableTokens?.length > 0 ? (
           <ul className="list">
             {availableTokens?.map((data) => (
-              <Card key={data.token_id} info={data} onClick={onBuyNFT} />
+              <Card key={data.token_id} info={data} onClick={onBuyNFT} currentUser={currentUser}/>
             ))}
           </ul>
         ) : (

@@ -15,9 +15,9 @@ const App = ({
 }) => {
   return (
     <>
-      <Header wallet={wallet} currentUser={currentUser} />
-      <main>
-        <Router>
+      <Router>
+        <Header wallet={wallet} currentUser={currentUser} />
+        <main>
           <Switch>
             <Route
               exact
@@ -38,13 +38,14 @@ const App = ({
                 <Buy
                   marketContract={marketContract}
                   nftContract={nftContract}
+                  currentUser={currentUser}
                   nearConfig={nearConfig}
                 />
               )}
             />
           </Switch>
-        </Router>
-      </main>
+        </main>
+      </Router>
     </>
   );
 };

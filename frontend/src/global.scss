@@ -5,12 +5,14 @@
 html {
   --bg: #fff;
   --fg: #25282a;
-  --gray: #888;
-  --royal: #0072ce;
-  --blue: #6ad1e3;
-  --primary: #d1ccbd;
+  --gray: rgb(74, 72, 72);
+  --royal: rgb(134, 219, 143);
+  --green: #116b20;
+  --light-green: #4c8f57;
+  --primary: #116b20;
   --secondary: var(--royal);
-  --tertiary: #ff585d;
+  --red: #b65336;
+  --light-red: #b06b56;
 
   background-color: var(--bg);
   color: var(--fg);
@@ -27,7 +29,7 @@ html {
   @media (prefers-color-scheme: dark) {
     --bg: #25282a;
     --fg: #fff;
-    --secondary: var(--blue);
+    --secondary: var(--green);
 
     ::selection {
       background: var(--secondary);
@@ -46,6 +48,16 @@ fieldset {
   border: none;
   margin: 0;
   padding: 0;
+  font-family: helvetica;
+
+  div {
+    margin-bottom: 20px;
+    
+    input {
+      border-bottom: 1px solid var(--light-green);
+      margin-left: 15px;
+    }
+  }
 }
 
 .highlight {
@@ -67,7 +79,6 @@ label {
 
 button,
 .highlight {
-  border-radius: 5px;
   border-color: var(--primary);
   border: 0.1em solid var(--primary);
   padding: 0.5em 1em;
@@ -83,7 +94,7 @@ input {
   border: none;
   flex: 1;
   &:read-only {
-    color: var(--primary);
+    color: var(--light-green);
   }
 }
 
@@ -91,12 +102,20 @@ input[type="number"] {
   text-align: center;
   border-bottom: 0.1em solid var(--primary);
   margin: 0 1em;
-  width: 4em;
+  width: 100px;
   padding-left: 0.5em;
   &:hover,
   &:focus {
     border-color: var(--secondary);
   }
+}
+
+textarea {
+  display: block;
+  border: 1px solid var(--light-green);
+  width: 350px;
+  height: 50px;
+  font-family: helvetica;
 }
 
 button,
@@ -111,6 +130,7 @@ input {
 button {
   position: relative;
   transition: top 50ms;
+  min-width: 180px;
   &:hover,
   &:focus {
     top: -1px;
@@ -162,13 +182,13 @@ main {
 .card {
   box-sizing: border-box;
   padding: 16px;
-  border-radius: 10%;
   height: 350px;
   list-style: none;
   width: 300px;
-  border: 1px solid;
+  border: 1px solid var(--primary);
   margin-bottom: 24px;
   position: relative;
+  text-align: center;
 }
 
 .card__image {
@@ -195,4 +215,38 @@ main {
   &:focus {
     top: auto;
   }
+}
+
+.wider-tooltip {
+   >div {
+    width: 300px
+  }
+}
+
+.nft-title {
+  margin: 5px;
+}
+
+
+.nft-description-link {
+  text-decoration: none;
+  color: var(--green);
+}
+
+.button-link-buy {
+  text-decoration: none;
+  color: var(--green);
+}
+
+.button-link-sell {
+  text-decoration: none;
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.button-wallet {
+  text-decoration: none;
+  color: white;
+  background-color: var(--gray);
+  border-color: var(--gray);
 }
